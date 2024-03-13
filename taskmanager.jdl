@@ -1,0 +1,13 @@
+entity Task {
+	title String
+	description String
+    createdDate LocalDate
+    modifiedDate LocalDate
+    startDate LocalDate
+    endDate LocalDate
+}
+
+relationship ManyToOne {
+	Task to User
+}
+
