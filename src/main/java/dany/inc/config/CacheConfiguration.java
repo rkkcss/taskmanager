@@ -48,6 +48,7 @@ public class CacheConfiguration {
             createCache(cm, dany.inc.domain.User.class.getName() + ".authorities");
             createCache(cm, dany.inc.domain.PersistentToken.class.getName());
             createCache(cm, dany.inc.domain.User.class.getName() + ".persistentTokens");
+            createCache(cm, dany.inc.domain.Task.class.getName());
             // jhipster-needle-caffeine-add-entry
         };
     }
