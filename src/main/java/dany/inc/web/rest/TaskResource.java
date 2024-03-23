@@ -49,7 +49,7 @@ public class TaskResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new task, or with status {@code 400 (Bad Request)} if the task has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/tasks")
+    @PostMapping("/task")
     public ResponseEntity<?> createTask(@RequestBody Task task) {
         log.debug("REST request to save Task : {}", task);
         return taskService.createTask(task);
@@ -65,7 +65,7 @@ public class TaskResource {
      * or with status {@code 500 (Internal Server Error)} if the task couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/tasks/{id}")
+    @PutMapping("/task/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable(value = "id", required = false) final Long id, @RequestBody Task task)
         throws URISyntaxException {
         log.debug("REST request to update Task : {}, {}", id, task);
@@ -98,7 +98,7 @@ public class TaskResource {
      * or with status {@code 500 (Internal Server Error)} if the task couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/tasks/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(value = "/task/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<Task> partialUpdateTask(@PathVariable(value = "id", required = false) final Long id, @RequestBody Task task)
         throws URISyntaxException {
         log.debug("REST request to partial update Task partially : {}, {}", id, task);
@@ -162,7 +162,7 @@ public class TaskResource {
      * @param id the id of the task to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the task, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/tasks/{id}")
+    @GetMapping("/task/{id}")
     public ResponseEntity<Task> getTask(@PathVariable Long id) {
         log.debug("REST request to get Task : {}", id);
         Optional<Task> task = taskRepository.findById(id);
@@ -175,13 +175,10 @@ public class TaskResource {
      * @param id the id of the task to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/tasks/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+    @DeleteMapping("/task/{id}")
+    public ResponseEntity<?> deleteTask(@PathVariable Long id) {
         log.debug("REST request to delete Task : {}", id);
         taskRepository.deleteById(id);
-        return ResponseEntity
-            .noContent()
-            .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
-            .build();
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted the task!");
     }
 }

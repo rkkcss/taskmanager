@@ -8,6 +8,7 @@ import dany.inc.security.SecurityUtils;
 import dany.inc.service.MailService;
 import dany.inc.service.UserService;
 import dany.inc.service.dto.AdminUserDTO;
+import dany.inc.service.dto.ChangeNameDTO;
 import dany.inc.service.dto.PasswordChangeDTO;
 import dany.inc.web.rest.errors.*;
 import dany.inc.web.rest.vm.KeyAndPasswordVM;
@@ -21,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -144,6 +146,19 @@ public class AccountResource {
             userDTO.getLangKey(),
             userDTO.getImageUrl()
         );
+    }
+
+    @PostMapping("/profile/userinfo")
+    public ResponseEntity updateUserInfo(@Valid @RequestBody ChangeNameDTO nameDTO) {
+        String userLogin = SecurityUtils
+            .getCurrentUserLogin()
+            .orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        User currentUser = userService.getUserWithAuthorities().orElseThrow(() -> new AccountResourceException("User could not be found"));
+        currentUser.setFirstName(nameDTO.getFirstName());
+        currentUser.setLastName(nameDTO.getLastName());
+        userRepository.save(currentUser);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully updated!");
     }
 
     /**

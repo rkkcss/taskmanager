@@ -36,7 +36,7 @@ public class TaskService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't create task because user is not present!");
         }
         if (task.getId() != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A new task cannot already have an ID: " + task.getId());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A new task cannot already has an ID: " + task.getId());
         }
         task.setUser(user.get());
         Task result = taskRepository.save(task);
